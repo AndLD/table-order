@@ -1,0 +1,8 @@
+configs/service-account.json
+ts-built
+.env*
+buffer/
+logs/
+results/
+app-settings.json
+node_modules

@@ -1,3 +1,6 @@
+import { GraphQLArgs } from 'graphql'
+import { isAuthorized } from '../middlewares/auth'
+
 export const root = {
     getAllTables() {
         return [
@@ -13,5 +16,8 @@ export const root = {
             }
         ]
     },
-    getAllOrders() {}
+    getAllOrders() {},
+    async getIsAuthorized(parent: any, args: GraphQLArgs, context: any) {
+        return !!(await isAuthorized(parent, args, context))
+    }
 }

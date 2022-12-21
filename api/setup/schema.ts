@@ -43,6 +43,7 @@ export const schema = buildSchema(`
     type Query {
         getAllTables: [Table]
         getAllOrders: [Order]
+        getIsAuthorized: Boolean
     }
 
     type Mutation {

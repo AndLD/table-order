@@ -1,29 +1,32 @@
-import { NextFunction, Response } from 'express'
 import { getLogger } from '../utils/logger'
 import jwt from 'jsonwebtoken'
 import { accessJwtSecret } from '../utils/jwt'
-import { apiUtils } from '../utils/api'
 import { errors } from '../utils/constants'
+import { GraphQLArgs } from 'graphql'
 
 const logger = getLogger('middlewares/auth')
 
-export async function isAuthorized(req: any, res: Response, next: NextFunction) {
-    if (!req.headers.authorization) {
-        return apiUtils.sendError(res, errors.AUTHORIZATION_HEADER_EMPTY)
+export async function isAuthorized(parent: any, args: GraphQLArgs, context: any) {
+    if (!context.request.headers.authorization) {
+        return false
     }
 
-    const token: string = req.headers.authorization.split(' ')[1] as string
+    const token: string = context.request.headers.authorization.split(' ')[1] as string
 
+    console.log(token)
     try {
         const decodeValue: any = jwt.verify(token, accessJwtSecret)
 
         // TODO: Validate decodeValue ?
 
-        req.user = decodeValue.user
+        context.request.user = decodeValue.user
+
+        return context
     } catch (e) {
         logger.error(e)
-        return apiUtils.sendError(res, errors.JWT_INVALID)
+        return {
+            __typename: 'InternalServerError',
+            message: errors.JWT_INVALID.msg
+        }
     }
-
-    next()
 }

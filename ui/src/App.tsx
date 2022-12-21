@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_ALL_TABLES } from './query/table'
+import { ITable } from './interfaces/table'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const { data, loading, error } = useQuery(GET_ALL_TABLES)
+
+    const [tables, setTables] = useState<ITable[]>([])
+
+    useEffect(() => {
+        if (!loading) {
+            setTables(data.getAllTables)
+        }
+    }, [data])
+
+    return (
+        <div className="App">
+            <form>
+                <input type="text" />
+            </form>
+            {tables && tables.map((table) => <div key={table.id}>{table.number}</div>)}
+        </div>
+    )
 }
 
-export default App;
+export default App

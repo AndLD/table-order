@@ -2,9 +2,10 @@ import httpServer from 'http'
 import dotenv from 'dotenv'
 dotenv.config({ path: `.env.${process.env.NODE_ENV || 'development'}` })
 import { getLogger } from '../utils/logger'
-import { setupServer } from '../setup/server'
-import { firebaseQuery } from '../services/firebase'
 import { environment } from '../utils/constants'
+import { setupServer } from './server'
+import { firebaseService } from '../services/firebase'
+import { mongodbService } from '../services/mongodb'
 
 let server: httpServer.Server | null = null
 const port = process.env.PORT || 8080
@@ -12,6 +13,7 @@ const port = process.env.PORT || 8080
 export async function startApp() {
     const logger = getLogger('setup/index')
 
+    await Promise.all([firebaseService.init(), mongodbService.init()])
     server = setupServer()
 
     server.listen(port, () => {

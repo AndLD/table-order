@@ -1,10 +1,39 @@
-import firebase from '../configs/firebase-config'
+import admin from 'firebase-admin'
+import { ServiceAccount } from '../utils/types'
 import { Any, DefaultResult, Filter, ModelAction, ModelArgs } from '../utils/types'
 import { errors } from '../utils/constants'
+import { getLogger } from '../utils/logger'
 
-const { db, documentId } = firebase
+const logger = getLogger('services/firebase')
 
-export const firebaseQuery = async ({ email, collection, where, docId, action, obj }: ModelArgs) => {
+let db: admin.firestore.Firestore | undefined
+let documentId: admin.firestore.FieldPath | undefined
+
+async function init() {
+    if (process.env.CLIENT_EMAIL && process.env.PRIVATE_KEY && process.env.PROJECT_ID) {
+        admin.initializeApp({
+            credential: admin.credential.cert({
+                clientEmail: process.env.CLIENT_EMAIL,
+                privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+                projectId: process.env.PROJECT_ID
+            } as ServiceAccount)
+        })
+        logger.info('Firebase successfully connected')
+
+        db = admin.firestore()
+        documentId = admin.firestore.FieldPath.documentId()
+
+        return db
+    }
+
+    throw 'Firebase configs not found in ".env"!'
+}
+
+async function getInstance(): Promise<admin.firestore.Firestore> {
+    return db || init()
+}
+
+async function query({ email, collection, where, docId, action, obj }: ModelArgs) {
     validateModelArgs({ where, docId, action })
 
     let result, error
@@ -19,7 +48,7 @@ export const firebaseQuery = async ({ email, collection, where, docId, action, o
         } else return [null, errors.DOC_NOT_FOUND] as DefaultResult
     }
 
-    const queryRef = prepareQueryRef({ collection, where, docId, action })
+    const queryRef = await prepareQueryRef({ collection, where, docId, action })
 
     // Making request
     const firebaseRes = await queryRef[action](obj)
@@ -38,7 +67,7 @@ const validateModelArgs = ({ where, docId, action }: { where?: Filter[]; docId?:
         throw `validateModelArgs: Missing docId during "${action}" action`
 }
 
-const prepareQueryRef = ({
+const prepareQueryRef = async ({
     collection,
     where,
     docId,
@@ -49,7 +78,7 @@ const prepareQueryRef = ({
     docId?: string
     action: ModelAction
 }) => {
-    let queryRef: any = db.collection(collection)
+    let queryRef: any = (await getInstance()).collection(collection)
 
     // PUT & DELETE
     if (action == 'update' || action == 'delete') queryRef = queryRef.doc(docId)
@@ -123,4 +152,9 @@ const isUserHasAccess = async (data: string | Any, email: string, entity?: strin
             return [result[0].friends.includes(email), null]
         }
     } else throw 'isUserHasAccess: Incorrect "doc"'
+}
+
+export const firebaseService = {
+    init,
+    query
 }

@@ -14,6 +14,7 @@ export default function App() {
             }
         })
     }, [])
+
     return (
         <ConfigProvider>
             <appContext.Provider value={useAppContextValue()}>

@@ -46,13 +46,14 @@ export const schema = buildSchema(`
     }
 
     type Query {
+        getIsAuthorized: Boolean
         getAllTables: [Table]
         getAllOrders: [Order]
-        getIsAuthorized: Boolean
     }
 
     type Mutation {
         login: String
+        logout: Boolean
         createTable: [Table]
         createOrder: [Order]
     }

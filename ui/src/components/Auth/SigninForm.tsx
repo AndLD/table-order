@@ -11,10 +11,10 @@ export default function SigninForm() {
     const [form] = Form.useForm()
     const [_, setToken] = useContext(appContext).tokenState
 
-    const [login, data] = useMutation(LOGIN)
+    const [loginMutation] = useMutation(LOGIN)
 
-    function onFinish(user: IAuthPostBody) {
-        login({
+    function login(user: IAuthPostBody) {
+        loginMutation({
             variables: {
                 input: user
             }
@@ -28,7 +28,7 @@ export default function SigninForm() {
     }
 
     return (
-        <Form form={form} name="basic" onFinish={onFinish} autoComplete="off" className="auth-form">
+        <Form form={form} name="basic" onFinish={login} autoComplete="off" className="auth-form">
             <Form.Item name="username" rules={[validationRules.REQUIRED('Будь-ласка введіть Ваш логін!')]}>
                 <Input type="text" placeholder="Username" />
             </Form.Item>

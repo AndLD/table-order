@@ -3,25 +3,37 @@ import { Navigate, useRoutes } from 'react-router'
 import { RouteObject } from 'react-router-dom'
 import { useAuth } from '../hooks/auth'
 import { useToken } from '../hooks/app'
-import Admin from '../pages/Admin'
+import Orders from '../pages/Orders'
 import Auth from '../pages/Auth'
 import Tables from '../pages/Tables'
+import AdminLayout from './AdminLayout'
+import Home from '../pages/Home'
 
 const privateRoutes: RouteObject[] = [
     {
         path: '/admin',
-        element: <Admin />
+        element: <AdminLayout />,
+        children: [
+            {
+                path: '/admin/orders',
+                element: <Orders />
+            },
+            {
+                path: '/admin/tables',
+                element: <Tables />
+            }
+        ]
     },
     {
-        path: '/tables',
-        element: <Tables />
+        path: '/',
+        element: <Home />
     }
 ]
 
 const publicRoutes: RouteObject[] = [
     {
-        path: '/tables',
-        element: <Tables />
+        path: '/',
+        element: <Home />
     },
     {
         path: '/auth',
@@ -40,7 +52,7 @@ export default function AppRoutes() {
     useEffect(() => {
         if (token) {
             setRoutes(privateRoutes)
-            setRedirectRoute('/admin')
+            setRedirectRoute('/admin/tables')
         } else {
             setRoutes(publicRoutes)
             setRedirectRoute('/auth')

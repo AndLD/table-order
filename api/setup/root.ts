@@ -46,5 +46,9 @@ export const root = {
         context.response.cookie('refresh_token', tokens.refreshToken, { httpOnly: true })
 
         return tokens.accessToken
+    },
+    logout(parent: any, args: any, context: any) {
+        context.response.clearCookie('refresh_token')
+        return true
     }
 }

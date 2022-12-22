@@ -2,26 +2,26 @@ import { getLogger } from '../utils/logger'
 import jwt from 'jsonwebtoken'
 import { accessJwtSecret } from '../utils/jwt'
 import { errors } from '../utils/constants'
-import { GraphQLArgs } from 'graphql'
 
 const logger = getLogger('middlewares/auth')
 
-export async function isAuthorized(parent: any, args: GraphQLArgs, context: any) {
-    if (!context.request.headers.authorization) {
+export async function isAuthorized(parent: any, args: any, context: any) {
+    const authorizationHeader = args.req.headers.authorization
+
+    if (!authorizationHeader?.length) {
         return false
     }
 
-    const token: string = context.request.headers.authorization.split(' ')[1] as string
+    const token: string = authorizationHeader.split(' ')[1] as string
 
-    console.log(token)
     try {
         const decodeValue: any = jwt.verify(token, accessJwtSecret)
 
         // TODO: Validate decodeValue ?
 
-        context.request.user = decodeValue.user
+        args.req.user = decodeValue.user
 
-        return context
+        return args
     } catch (e) {
         logger.error(e)
         return {

@@ -20,6 +20,11 @@ export const schema = buildSchema(`
         email: String
     }
 
+    input LoginInput {
+        username: String
+        password: String
+    }
+
     input TableInput {
         id: ID
         number: Int
@@ -47,6 +52,7 @@ export const schema = buildSchema(`
     }
 
     type Mutation {
+        login: String
         createTable: [Table]
         createOrder: [Order]
     }

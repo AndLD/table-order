@@ -1,5 +1,8 @@
-import { GraphQLArgs } from 'graphql'
 import { isAuthorized } from '../middlewares/auth'
+import { errors, rootUser } from '../utils/constants'
+import { IAuthPostBody } from '../utils/interfaces/auth'
+import { IUserState } from '../utils/interfaces/user'
+import { createJwt } from '../utils/jwt'
 
 export const root = {
     getAllTables() {
@@ -17,7 +20,31 @@ export const root = {
         ]
     },
     getAllOrders() {},
-    async getIsAuthorized(parent: any, args: GraphQLArgs, context: any) {
-        return !!(await isAuthorized(parent, args, context))
+    getIsAuthorized(parent: any, args: any, context: any) {
+        return new Promise((resolve, reject) => {
+            isAuthorized(parent, args, context).then((result) => {
+                resolve(!!result)
+            })
+        })
+    },
+    login(parent: any, args: any, context: any) {
+        const body: IAuthPostBody = args.req.body
+
+        const isValid = body.username === 'root' && body.password === rootUser.password
+
+        if (!isValid) {
+            throw errors.CREDENTIALS_INVALID
+        }
+
+        // JWT
+        const userState: IUserState = {
+            username: args.req.user.username
+        }
+
+        const tokens = createJwt(userState)
+
+        context.response.cookie('refresh_token', tokens.refreshToken, { httpOnly: true })
+
+        return tokens.accessToken
     }
 }

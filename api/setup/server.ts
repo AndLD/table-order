@@ -1,5 +1,5 @@
 import express from 'express'
-import cors from 'cors'
+import cors, { CorsOptions } from 'cors'
 import helmet from 'helmet'
 import httpServer from 'http'
 import cookieParser from 'cookie-parser'
@@ -14,22 +14,34 @@ export function setupServer() {
     app.use(helmet({ contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false }))
     app.use(express.json())
 
-    // const whitelist = process.env.WHITELIST_URLS
-    // const corsOptions = {
-    //     origin: function (origin: string, callback: any) {
-    //         if (!origin || whitelist?.indexOf(origin) !== -1) {
-    //             callback(null, true)
-    //         } else {
-    //             callback(new Error('Not allowed by CORS'))
-    //         }
-    //     },
-    //     credentials: true
-    // }
-    app.use(cors())
+    const whitelist = process.env.WHITELIST_URLS
+    const corsOptions: CorsOptions = {
+        origin: function (origin: string, callback: any) {
+            if (!origin || whitelist?.indexOf(origin) !== -1) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        } as any,
+        credentials: true
+    }
+    app.use(cors(corsOptions))
     app.use(cookieParser())
     app.use(loggerMiddleware)
 
-    app.use('/graphql', graphqlHTTP({ schema, rootValue: root, graphiql: true }))
+    app.use(
+        '/graphql',
+        graphqlHTTP((req, res, graphqlParams) => {
+            return {
+                schema,
+                rootValue: root,
+                graphiql: true,
+                context: {
+                    req
+                }
+            }
+        })
+    )
 
     return httpServer.createServer(app)
 }

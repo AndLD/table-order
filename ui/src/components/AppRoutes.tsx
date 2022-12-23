@@ -42,8 +42,6 @@ const publicRoutes: RouteObject[] = [
 ]
 
 export default function AppRoutes() {
-    useAuth()
-
     const token = useToken()
 
     const [routes, setRoutes] = useState<RouteObject[]>([])

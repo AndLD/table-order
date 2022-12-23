@@ -11,20 +11,24 @@ export default function SigninForm() {
     const [form] = Form.useForm()
     const [_, setToken] = useContext(appContext).tokenState
 
-    const [loginMutation] = useMutation(LOGIN)
+    const [loginMutation] = useMutation(LOGIN, { ignoreResults: true })
 
     function login(user: IAuthPostBody) {
         loginMutation({
             variables: {
                 input: user
             }
-        }).then(({ data, errors }) => {
-            if (data) {
-                setToken(data)
-            } else if (errors) {
-                errorNotification(errors[0].message, 'Помилка входу в систему')
-            }
         })
+            .then(({ data }) => {
+                if (data.login) {
+                    setToken(data.login)
+                }
+            })
+            .catch((err) => {
+                const errors = err.graphQLErrors
+
+                errorNotification(errors.join('\n'), 'Помилка входу в систему')
+            })
     }
 
     return (

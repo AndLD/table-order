@@ -11,13 +11,19 @@ export default function useLogoutMenuItem() {
     const [logoutMutation] = useMutation(LOGOUT)
 
     function logout() {
-        logoutMutation().then(({ data, errors }) => {
-            if (data) {
-                setToken(null)
-            } else if (errors) {
-                errorNotification(errors[0].message, 'Помилка виходу')
-            }
-        })
+        logoutMutation()
+            .then(({ data }) => {
+                console.log(data)
+                if (data.logout) {
+                    setToken(null)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                const errors = err.graphQLErrors
+
+                errorNotification(errors.join('\n'), 'Помилка вихіду')
+            })
     }
 
     return {

@@ -37,7 +37,11 @@ export function setupServer() {
                 rootValue: root,
                 graphiql: true,
                 context: {
-                    req
+                    req,
+                    res
+                },
+                customFormatErrorFn: (err) => {
+                    return err.message as any
                 }
             }
         })

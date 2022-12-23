@@ -21,8 +21,8 @@ export const schema = buildSchema(`
     }
 
     input LoginInput {
-        username: String
-        password: String
+        username: String!
+        password: String!
     }
 
     input TableInput {
@@ -52,9 +52,9 @@ export const schema = buildSchema(`
     }
 
     type Mutation {
-        login: String
+        login(input: LoginInput): String
         logout: Boolean
-        createTable: [Table]
-        createOrder: [Order]
+        createTable(input: TableInput): Table
+        createOrder(input: OrderInput): Order
     }
 `)

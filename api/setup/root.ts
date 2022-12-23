@@ -1,3 +1,4 @@
+import { GraphQLError } from 'graphql'
 import { isAuthorized } from '../middlewares/auth'
 import { errors, rootUser } from '../utils/constants'
 import { IAuthPostBody } from '../utils/interfaces/auth'
@@ -28,27 +29,35 @@ export const root = {
         })
     },
     login(parent: any, args: any, context: any) {
-        const body: IAuthPostBody = args.req.body
+        try {
+            const body: IAuthPostBody = args.req.body.variables.input
 
-        const isValid = body.username === 'root' && body.password === rootUser.password
+            const isValid = body.username === 'root' && body.password === rootUser.password
 
-        if (!isValid) {
-            throw errors.CREDENTIALS_INVALID
+            if (!isValid) {
+                throw errors.CREDENTIALS_INVALID
+            }
+
+            // JWT
+            const userState: IUserState = {
+                username: body.username
+            }
+
+            const tokens = createJwt(userState)
+
+            args.res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true })
+
+            return tokens.accessToken
+        } catch (err) {
+            throw new GraphQLError(`${errors.INTERNAL_SERVER_ERROR.msg} ${errors.INTERNAL_SERVER_ERROR.code}`)
         }
-
-        // JWT
-        const userState: IUserState = {
-            username: args.req.user.username
-        }
-
-        const tokens = createJwt(userState)
-
-        context.response.cookie('refresh_token', tokens.refreshToken, { httpOnly: true })
-
-        return tokens.accessToken
     },
     logout(parent: any, args: any, context: any) {
-        context.response.clearCookie('refresh_token')
-        return true
+        try {
+            args.response.clearCookie('refresh_token')
+            return true
+        } catch (err) {
+            throw new GraphQLError(`${errors.INTERNAL_SERVER_ERROR.msg} ${errors.INTERNAL_SERVER_ERROR.code}`)
+        }
     }
 }

@@ -11,3 +11,9 @@ export const LOGOUT = gql`
         logout: Boolean
     }
 `
+
+export const REFRESH = gql`
+    mutation {
+        refresh: String
+    }
+`

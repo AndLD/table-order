@@ -1,9 +1,14 @@
 import { GraphQLError } from 'graphql'
+import jwt from 'jsonwebtoken'
 import { isAuthorized } from '../middlewares/auth'
 import { errors, rootUser } from '../utils/constants'
 import { IAuthPostBody } from '../utils/interfaces/auth'
 import { IUserState } from '../utils/interfaces/user'
-import { createJwt } from '../utils/jwt'
+import { createJwt, refreshJwtSecret } from '../utils/jwt'
+
+interface IRefreshJwtPayload extends jwt.JwtPayload {
+    user: IUserState
+}
 
 export const root = {
     getAllTables() {
@@ -59,5 +64,36 @@ export const root = {
         } catch (err) {
             throw new GraphQLError(`${errors.INTERNAL_SERVER_ERROR.msg} ${errors.INTERNAL_SERVER_ERROR.code}`)
         }
+    },
+    refresh(parent: any, args: any, context: any) {
+        const refreshToken = args.req.cookies.refresh_token
+
+        if (!refreshToken) {
+            throw new GraphQLError(
+                `${errors.UNABLE_TO_REFRESH_ACCESS_JWT.msg} ${errors.UNABLE_TO_REFRESH_ACCESS_JWT.code}`
+            )
+        }
+
+        // TODO: Investigate cases when jwt.verify can return a string ?
+        try {
+            var decodeValue: IRefreshJwtPayload = jwt.verify(refreshToken, refreshJwtSecret) as IRefreshJwtPayload
+        } catch (e) {
+            throw new GraphQLError(
+                `${errors.UNABLE_TO_REFRESH_ACCESS_JWT.msg} ${errors.UNABLE_TO_REFRESH_ACCESS_JWT.code}`
+            )
+        }
+        if (!decodeValue?.user) {
+            throw new Error('decodeValue.user is empty!')
+        }
+
+        const userState: IUserState = {
+            username: 'root'
+        }
+
+        const tokens = createJwt(userState)
+
+        args.res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true })
+
+        return tokens.accessToken
     }
 }

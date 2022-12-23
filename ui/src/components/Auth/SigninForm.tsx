@@ -1,35 +1,10 @@
-import { useMutation } from '@apollo/client'
 import { Button, Form, Input } from 'antd'
-import { useContext } from 'react'
-import { appContext } from '../../contexts'
-import { LOGIN } from '../../graphql/mutations/auth'
-import { IAuthPostBody } from '../../utils/interfaces/auth'
-import { errorNotification } from '../../utils/notifications'
+import { useLogin } from '../../hooks/graphql/mutations/auth'
 import { validationRules } from '../../utils/validation'
 
 export default function SigninForm() {
     const [form] = Form.useForm()
-    const [_, setToken] = useContext(appContext).tokenState
-
-    const [loginMutation] = useMutation(LOGIN, { ignoreResults: true })
-
-    function login(user: IAuthPostBody) {
-        loginMutation({
-            variables: {
-                input: user
-            }
-        })
-            .then(({ data }) => {
-                if (data.login) {
-                    setToken(data.login)
-                }
-            })
-            .catch((err) => {
-                const errors = err.graphQLErrors
-
-                errorNotification(errors.join('\n'), 'Помилка входу в систему')
-            })
-    }
+    const login = useLogin()
 
     return (
         <Form form={form} name="basic" onFinish={login} autoComplete="off" className="auth-form">

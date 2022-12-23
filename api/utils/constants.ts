@@ -25,7 +25,6 @@ export const errors = {
     NAME_NOT_MATCHES_PATTERN: { msg: "Ім'я невірне", code: 400 },
     PASSWORD_NOT_MATCHES_PATTERN: { msg: 'Пароль невірний', code: 400 },
     EMAIL_ALREADY_EXISTS: { msg: 'Email вже існує', code: 400 },
-    UNABLE_TO_REFRESH_ACCESS_JWT: { msg: 'Unable to refresh access JWT', code: 401 },
     AUTHORIZATION_HEADER_EMPTY: { msg: 'Authorization header is empty', code: 401 },
     ENTITY_ALREADY_EXISTS: { msg: 'Entity already exists', code: 400 },
     ENTITY_USED: { msg: "Об'єкт використовується", code: 400 },

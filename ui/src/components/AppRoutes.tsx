@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useRoutes } from 'react-router'
 import { RouteObject } from 'react-router-dom'
-import { useAuth } from '../hooks/auth'
 import { useToken } from '../hooks/app'
 import Orders from '../pages/Orders'
 import Auth from '../pages/Auth'

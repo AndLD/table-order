@@ -5,15 +5,3 @@ export const LOGIN = gql`
         login(input: $input)
     }
 `
-
-export const LOGOUT = gql`
-    mutation {
-        logout: Boolean
-    }
-`
-
-export const REFRESH = gql`
-    mutation {
-        refresh: String
-    }
-`

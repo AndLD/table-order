@@ -5,8 +5,11 @@ import { appContext } from './contexts'
 import { useAppContextValue } from './hooks/app'
 import { ConfigProvider } from 'antd'
 import { useEffect } from 'react'
+import { useAuth } from './hooks/auth'
 
 export default function App() {
+    const tokenState = useAuth()
+
     useEffect(() => {
         ConfigProvider.config({
             theme: {
@@ -15,9 +18,11 @@ export default function App() {
         })
     }, [])
 
+    const appContextValue = useAppContextValue(tokenState)
+
     return (
         <ConfigProvider>
-            <appContext.Provider value={useAppContextValue()}>
+            <appContext.Provider value={appContextValue}>
                 <BrowserRouter>
                     <AppRoutes />
                 </BrowserRouter>

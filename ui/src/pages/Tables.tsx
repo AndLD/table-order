@@ -7,15 +7,15 @@ import { useTitle } from '../hooks/app'
 export default function Tables() {
     useTitle('Столи')
 
-    // const { data, loading, error, refetch } = useQuery(GET_ALL_TABLES)
+    const { data, loading, error, refetch } = useQuery(GET_ALL_TABLES)
 
     const [tables, setTables] = useState<ITable[]>([])
 
-    // useEffect(() => {
-    //     if (!loading) {
-    //         setTables(data.getAllTables)
-    //     }
-    // }, [data])
+    useEffect(() => {
+        if (!loading && data.getAllTables) {
+            setTables(data.getAllTables)
+        }
+    }, [data])
 
     return <div>{tables && tables.map((table) => <div key={table.id}>{table.number}</div>)}</div>
 }

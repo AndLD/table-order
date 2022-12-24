@@ -3,7 +3,7 @@ import { isAuthorized } from '../middlewares/auth'
 import { firebaseService } from '../services/firebase'
 import { errors, rootUser } from '../utils/constants'
 import { IAuthPostBody } from '../utils/interfaces/auth'
-import { ITablePostBody } from '../utils/interfaces/table'
+import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
 import { IUserState } from '../utils/interfaces/user'
 import { createJwt } from '../utils/jwt'
 
@@ -80,6 +80,42 @@ export const root = {
         }
 
         return modelResult
+    },
+    async updateTable(parent: any, args: any, context: any) {
+        isAuthorized(parent, args, context)
+
+        const tableId: string = args.req.body.variables.id
+        const body: ITablePutBody = args.req.body.variables.input
+
+        const [modelResult, modelError] = await firebaseService.query({
+            collection: 'tables',
+            action: 'update',
+            docId: tableId,
+            obj: body
+        })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        return modelResult
+    },
+    async deleteTable(parent: any, args: any, context: any) {
+        isAuthorized(parent, args, context)
+
+        const tableId: string = args.req.body.variables.id
+
+        const [_, modelError] = await firebaseService.query({
+            collection: 'tables',
+            action: 'delete',
+            docId: tableId
+        })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        return true
     }
 }
 

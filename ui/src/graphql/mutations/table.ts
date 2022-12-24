@@ -13,3 +13,17 @@ export const CREATE_TABLE = gql`
         }
     }
 `
+
+export const UPDATE_TABLE = gql`
+    mutation updateTable($id: String, $input: TableInput) {
+        updateTabel(id: $id, input: $input) {
+            id
+            number
+            seats
+            width
+            height
+            x
+            y
+        }
+    }
+`

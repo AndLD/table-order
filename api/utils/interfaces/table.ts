@@ -15,3 +15,11 @@ export interface ITablePostBody {
     x: number
     y: number
 }
+
+export interface ITablePutBody {
+    seats: number
+    width: number
+    height: number
+    x: number
+    y: number
+}

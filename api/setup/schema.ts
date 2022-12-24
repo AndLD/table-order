@@ -54,6 +54,8 @@ export const schema = buildSchema(`
     type Mutation {
         login(input: LoginInput): String
         createTable(input: TableInput): Table
+        updateTable(id: String, input: TableInput): Table
+        deleteTable(id: String): Boolean
         createOrder(input: OrderInput): Order
     }
 `)

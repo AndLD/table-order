@@ -1,41 +1,43 @@
 import { GraphQLError } from 'graphql'
-import jwt from 'jsonwebtoken'
 import { isAuthorized } from '../middlewares/auth'
+import { firebaseService } from '../services/firebase'
 import { errors, rootUser } from '../utils/constants'
 import { IAuthPostBody } from '../utils/interfaces/auth'
+import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
 import { IUserState } from '../utils/interfaces/user'
 import { createJwt } from '../utils/jwt'
 
 export const root = {
-    getAllTables(parent: any, args: any, context: any) {
-        return new Promise((resolve, reject) => {
-            isAuthorized(parent, args, context).then((result) => {
-                if (result) {
-                    resolve([
-                        {
-                            id: 'dsfgfhd',
-                            number: 1,
-                            seats: 3,
-                            shape: 'rectangular',
-                            height: 100,
-                            width: 200,
-                            x: 0,
-                            y: 0
-                        }
-                    ])
-                } else {
-                    resolve(new GraphQLError(`${errors.JWT_INVALID.code}`))
-                }
-            })
-        })
+    async getAllTables(parent: any, args: any, context: any) {
+        isAuthorized(parent, args, context)
+
+        const [modelResult, modelError] = await firebaseService.query({ collection: 'tables', action: 'get' })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        if (!modelResult?.length) {
+            return []
+        }
+
+        return modelResult
     },
-    getAllOrders() {},
+    async getAllOrders() {
+        const [modelResult, modelError] = await firebaseService.query({ collection: 'tables', action: 'get' })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        if (!modelResult?.length) {
+            return []
+        }
+
+        return modelResult
+    },
     getIsAuthorized(parent: any, args: any, context: any) {
-        return new Promise((resolve, reject) => {
-            isAuthorized(parent, args, context).then((result) => {
-                resolve(!!result)
-            })
-        })
+        return !!isAuthorized(parent, args, context)
     },
     login(parent: any, args: any, context: any) {
         try {
@@ -56,5 +58,69 @@ export const root = {
         } catch (err) {
             throw new GraphQLError(`${errors.INTERNAL_SERVER_ERROR.msg} ${errors.INTERNAL_SERVER_ERROR.code}`)
         }
+    },
+    async createTable(parent: any, args: any, context: any) {
+        isAuthorized(parent, args, context)
+
+        const body: ITablePostBody = args.req.body.variables.input
+
+        const table = {
+            number: getRandomNumber(0, 9999),
+            ...body
+        }
+
+        const [modelResult, modelError] = await firebaseService.query({
+            collection: 'tables',
+            action: 'add',
+            obj: table
+        })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        return modelResult
+    },
+    async updateTable(parent: any, args: any, context: any) {
+        isAuthorized(parent, args, context)
+
+        const tableId: string = args.req.body.variables.id
+        const body: ITablePutBody = args.req.body.variables.input
+
+        const [modelResult, modelError] = await firebaseService.query({
+            collection: 'tables',
+            action: 'update',
+            docId: tableId,
+            obj: body
+        })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        return modelResult
+    },
+    async deleteTable(parent: any, args: any, context: any) {
+        isAuthorized(parent, args, context)
+
+        const tableId: string = args.req.body.variables.id
+
+        const [_, modelError] = await firebaseService.query({
+            collection: 'tables',
+            action: 'delete',
+            docId: tableId
+        })
+
+        if (modelError) {
+            throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+        }
+
+        return true
     }
+}
+
+function getRandomNumber(min: number, max: number) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min)
 }

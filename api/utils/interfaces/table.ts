@@ -7,3 +7,11 @@ export interface ITable {
     x: number
     y: number
 }
+
+export interface ITablePostBody {
+    seats: number
+    width: number
+    height: number
+    x: number
+    y: number
+}

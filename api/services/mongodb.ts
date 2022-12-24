@@ -1,5 +1,5 @@
-import { getLogger } from 'log4js'
 import mongoose from 'mongoose'
+import { getLogger } from '../utils/logger'
 
 const logger = getLogger('services/mongodb')
 const MONGO_DB_CONNECTION_STRING = process.env.MONGO_DB_CONNECTION_STRING

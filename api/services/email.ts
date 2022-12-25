@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer'
-import { FRONTEND_URL } from '../utils/constants'
 import { getLogger } from '../utils/logger'
 
 const logger = getLogger('services/email')

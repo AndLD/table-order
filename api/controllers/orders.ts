@@ -1,5 +1,6 @@
 import { GraphQLError } from 'graphql'
 import { isAuthorized } from '../middlewares/auth'
+import { emailService } from '../services/email'
 import { orderService } from '../services/orders'
 import { tableService } from '../services/tables'
 import { IOrderPostBody } from '../utils/interfaces/order'
@@ -21,13 +22,15 @@ async function createOrder(parent: any, args: any, context: any) {
 
     for (const order of orders) {
         if (Math.abs(body.timestamp - order.timestamp) < 60 * 60 * 1000) {
-            throw new GraphQLError(`Table already ordered for specified timestamp 403`)
+            throw new GraphQLError(`Table already ordered for specified timestamp 400`)
         }
     }
 
-    // TODO: Send email for order accepted
+    const order = await orderService.createOrder(body)
 
-    return await orderService.createOrder(body)
+    await emailService.sendOrderConfirmation(body.email, order.id)
+
+    return order
 }
 
 async function deleteOrder(parent: any, args: any, context: any) {

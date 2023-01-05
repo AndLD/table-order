@@ -45,7 +45,7 @@ async function createOrder(order: IOrderPostBody) {
         throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
     }
 
-    return modelResult
+    return modelResult as IOrder
 }
 
 async function deleteOrder(id: string) {

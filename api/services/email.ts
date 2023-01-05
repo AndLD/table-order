@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer'
-import { FRONTEND_URL } from '../utils/constants'
 import { getLogger } from '../utils/logger'
 
 const logger = getLogger('services/email')
@@ -44,7 +43,7 @@ async function _sendMail({ email, subject, html }: { email: string; subject: str
     }
 
     await transporter.sendMail({
-        from: 'Law Quest <lawquestplatform@gmail.com>',
+        from: `Table Order <${EMAIL_SMTP_USER}>`,
         to: email,
         subject,
         html

@@ -31,21 +31,16 @@ export function setupServer() {
 
     app.use(
         '/graphql',
-        graphqlHTTP((req, res, graphqlParams) => {
-            return {
-                schema,
-                rootValue: root,
-                graphiql: true,
-                context: {
-                    req,
-                    res,
-                    graphqlParams
-                },
-                customFormatErrorFn: (err) => {
-                    return err.message as any
-                }
-            }
-        })
+        graphqlHTTP((req, res, graphqlParams) => ({
+            schema,
+            rootValue: root,
+            graphiql: true,
+            context: {
+                req,
+                res
+            },
+            customFormatErrorFn: (err) => err.message as any
+        }))
     )
 
     return httpServer.createServer(app)

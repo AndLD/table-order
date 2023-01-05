@@ -16,6 +16,8 @@ async function createTable(parent: any, args: any, context: any) {
 
     const body: ITablePostBody = args.req.body.variables.input
 
+    // TODO: Check if table coordinates already in use
+
     const table = {
         number: getRandomNumber(0, 9999),
         ...body
@@ -39,6 +41,8 @@ async function updateTable(parent: any, args: any, context: any) {
 
     const tableId: string = args.req.body.variables.id
     const body: ITablePutBody = args.req.body.variables.input
+
+    // TODO: Check if table coordinates already in use
 
     return tableService.updateTable(tableId, body)
 }

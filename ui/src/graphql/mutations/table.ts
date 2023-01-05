@@ -8,6 +8,7 @@ export const CREATE_TABLE = gql`
             seats
             width
             height
+            shape
             x
             y
         }
@@ -22,6 +23,7 @@ export const UPDATE_TABLE = gql`
             seats
             width
             height
+            shape
             x
             y
         }

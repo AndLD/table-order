@@ -14,7 +14,8 @@ export const schema = buildSchema(`
 
     type Order {
         id: ID
-        timestamp: Int
+        timestamp: Float
+        tableId: ID
         name: String
         address: String
         email: String
@@ -38,8 +39,8 @@ export const schema = buildSchema(`
 
     input OrderInput {
         id: ID
-        timestamp: Int
-        tableId: ID
+        timestamp: Float!
+        tableId: ID!
         name: String!
         address: String!
         email: String!
@@ -61,5 +62,6 @@ export const schema = buildSchema(`
         deleteTable(id: String): Boolean
         
         createOrder(input: OrderInput): Order
+        deleteOrder(id: String): Boolean
     }
 `)

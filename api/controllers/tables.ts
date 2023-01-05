@@ -1,23 +1,14 @@
 import { GraphQLError } from 'graphql'
 import { isAuthorized } from '../middlewares/auth'
 import { firebaseService } from '../services/firebase'
+import { tableService } from '../services/tables'
 import { getRandomNumber } from '../utils/common'
 import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
 
 async function getAllTables(parent: any, args: any, context: any) {
     isAuthorized(parent, args, context)
 
-    const [modelResult, modelError] = await firebaseService.query({ collection: 'tables', action: 'get' })
-
-    if (modelError) {
-        throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
-    }
-
-    if (!modelResult?.length) {
-        return []
-    }
-
-    return modelResult
+    return await tableService.getAllTables()
 }
 
 async function createTable(parent: any, args: any, context: any) {
@@ -49,18 +40,7 @@ async function updateTable(parent: any, args: any, context: any) {
     const tableId: string = args.req.body.variables.id
     const body: ITablePutBody = args.req.body.variables.input
 
-    const [modelResult, modelError] = await firebaseService.query({
-        collection: 'tables',
-        action: 'update',
-        docId: tableId,
-        obj: body
-    })
-
-    if (modelError) {
-        throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
-    }
-
-    return modelResult
+    return tableService.updateTable(tableId, body)
 }
 
 async function deleteTable(parent: any, args: any, context: any) {
@@ -68,15 +48,7 @@ async function deleteTable(parent: any, args: any, context: any) {
 
     const tableId: string = args.req.body.variables.id
 
-    const [_, modelError] = await firebaseService.query({
-        collection: 'tables',
-        action: 'delete',
-        docId: tableId
-    })
-
-    if (modelError) {
-        throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
-    }
+    await tableService.deleteTable(tableId)
 
     return true
 }

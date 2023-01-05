@@ -1,20 +1,47 @@
 import { GraphQLError } from 'graphql'
-import { firebaseService } from '../services/firebase'
+import { isAuthorized } from '../middlewares/auth'
+import { orderService } from '../services/orders'
+import { tableService } from '../services/tables'
+import { IOrderPostBody } from '../utils/interfaces/order'
 
-async function getAllOrders() {
-    const [modelResult, modelError] = await firebaseService.query({ collection: 'tables', action: 'get' })
+async function getAllOrders(parent: any, args: any, context: any) {
+    isAuthorized(parent, args, context)
 
-    if (modelError) {
-        throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
+    return await orderService.getAllOrders()
+}
+
+async function createOrder(parent: any, args: any, context: any) {
+    isAuthorized(parent, args, context)
+
+    const body: IOrderPostBody = args.req.body.variables.input
+
+    const table = await tableService.getTableById(body.tableId)
+    if (!table) {
+        throw new GraphQLError(`Table does not exists 404`)
+    }
+    const orders = await orderService.getOrdersByTableId(body.tableId)
+
+    for (const order of orders) {
+        if (Math.abs(body.timestamp - order.timestamp) < 60 * 60 * 1000) {
+            throw new GraphQLError(`Table already ordered for specified timestamp 403`)
+        }
     }
 
-    if (!modelResult?.length) {
-        return []
-    }
+    return await orderService.createOrder(body)
+}
 
-    return modelResult
+async function deleteOrder(parent: any, args: any, context: any) {
+    isAuthorized(parent, args, context)
+
+    const orderId: string = args.req.body.variables.id
+
+    await orderService.deleteOrder(orderId)
+
+    return true
 }
 
 export const orderControllers = {
-    getAllOrders
+    getAllOrders,
+    createOrder,
+    deleteOrder
 }

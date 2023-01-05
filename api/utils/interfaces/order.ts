@@ -6,3 +6,11 @@ export interface IOrder {
     address: string
     email: string
 }
+
+export interface IOrderPostBody {
+    timestamp: number
+    tableId: string
+    name: string
+    address: string
+    email: string
+}

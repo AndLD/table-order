@@ -11,8 +11,6 @@ async function getAllOrders(parent: any, args: any, context: any) {
 }
 
 async function createOrder(parent: any, args: any, context: any) {
-    isAuthorized(parent, args, context)
-
     const body: IOrderPostBody = args.req.body.variables.input
 
     const table = await tableService.getTableById(body.tableId)
@@ -26,6 +24,8 @@ async function createOrder(parent: any, args: any, context: any) {
             throw new GraphQLError(`Table already ordered for specified timestamp 403`)
         }
     }
+
+    // TODO: Send email for order accepted
 
     return await orderService.createOrder(body)
 }

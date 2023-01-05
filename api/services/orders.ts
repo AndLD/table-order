@@ -60,7 +60,6 @@ async function deleteOrder(id: string) {
     }
 }
 
-// Some comment
 export const orderService = {
     getAllOrders,
     getOrdersByTableId,

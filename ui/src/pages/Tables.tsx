@@ -1,34 +1,14 @@
-import { useEffect, useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { GET_ALL_TABLES } from '../graphql/queries/table'
-import { ITable } from '../utils/interfaces/table'
+import { useState } from 'react'
 import { useTitle } from '../hooks/app'
-import { errorNotification } from '../utils/notifications'
+import { useGetAllTables } from '../hooks/graphql/queries/tables'
+import { ITable } from '../utils/interfaces/table'
 
 export default function Tables() {
     useTitle('Столи')
 
-    const { data, loading, error, refetch } = useQuery(GET_ALL_TABLES)
-
     const [tables, setTables] = useState<ITable[]>([])
 
-    useEffect(() => {
-        if (!loading && data?.getAllTables) {
-            setTables(data.getAllTables)
-        }
-    }, [data])
-
-    useEffect(() => {
-        if (!error) {
-            return
-        }
-
-        const errors = error.graphQLErrors
-
-        if (errors.length) {
-            errorNotification(errors[0].toString(), 'Помилка отримання столів')
-        }
-    }, [error])
+    useGetAllTables(setTables)
 
     return (
         <div>

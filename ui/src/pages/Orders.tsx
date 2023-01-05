@@ -8,11 +8,14 @@ import { IOrder } from '../utils/interfaces/order'
 export default function Orders() {
     useTitle('Замовлення')
 
-    const [isTableLoading, setIsTableLoading] = useState(false)
+    const [isTableLoading, setIsTableLoading] = useState(true)
     const [orders, setOrders] = useState<IOrder[]>([])
     const [selectedRows, setSelectedRows] = useState<IOrder[]>([])
 
-    useGetAllOrders(setOrders)
+    useGetAllOrders((result) => {
+        setOrders(result)
+        setIsTableLoading(false)
+    })
     const deleteOrder = useDeleteOrder()
 
     return (

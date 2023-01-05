@@ -1,6 +1,4 @@
-import { GraphQLError } from 'graphql'
 import { isAuthorized } from '../middlewares/auth'
-import { firebaseService } from '../services/firebase'
 import { tableService } from '../services/tables'
 import { getRandomNumber } from '../utils/common'
 import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
@@ -16,24 +14,14 @@ async function createTable(parent: any, args: any, context: any) {
 
     const body: ITablePostBody = args.req.body.variables.input
 
-    // TODO: Check if table coordinates already in use
+    await tableService.isCoordinatesUniq(body.x, body.y)
 
     const table = {
         number: getRandomNumber(0, 9999),
         ...body
     }
 
-    const [modelResult, modelError] = await firebaseService.query({
-        collection: 'tables',
-        action: 'add',
-        obj: table
-    })
-
-    if (modelError) {
-        throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
-    }
-
-    return modelResult
+    return await tableService.createTable(table)
 }
 
 async function updateTable(parent: any, args: any, context: any) {
@@ -42,9 +30,9 @@ async function updateTable(parent: any, args: any, context: any) {
     const tableId: string = args.req.body.variables.id
     const body: ITablePutBody = args.req.body.variables.input
 
-    // TODO: Check if table coordinates already in use
+    await tableService.isCoordinatesUniq(body.x, body.y)
 
-    return tableService.updateTable(tableId, body)
+    return await tableService.updateTable(tableId, body)
 }
 
 async function deleteTable(parent: any, args: any, context: any) {

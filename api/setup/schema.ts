@@ -5,9 +5,9 @@ export const schema = buildSchema(`
         id: ID
         number: Int
         seats: Int
-        shape: String
         width: Int
         height: Int
+        shape: String
         x: Int
         y: Int
     }
@@ -30,9 +30,9 @@ export const schema = buildSchema(`
         id: ID
         number: Int
         seats: Int!
-        shape: String!
         width: Int!
         height: Int!
+        shape: String!
         x: Int!
         y: Int!
     }

@@ -8,6 +8,7 @@ export const GET_ALL_TABLES = gql`
             seats
             width
             height
+            shape
             x
             y
         }

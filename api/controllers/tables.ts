@@ -1,4 +1,5 @@
 import { isAuthorized } from '../middlewares/auth'
+import { orderService } from '../services/orders'
 import { tableService } from '../services/tables'
 import { getRandomNumber } from '../utils/common'
 import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
@@ -51,6 +52,13 @@ async function deleteTable(parent: any, args: any, context: any) {
     isAuthorized(parent, args, context)
 
     const tableId: string = args.req.body.variables.id
+
+    const orders = await orderService.getOrdersByTableId(tableId)
+
+    // Delete all orders bound with the table we gonna delete
+    if (orders.length) {
+        await orderService.deleteOrders(orders.map((order) => order.id))
+    }
 
     await tableService.deleteTable(tableId)
 

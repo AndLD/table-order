@@ -1,14 +1,30 @@
 import { ToolOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
-import useFormInstance from 'antd/lib/form/hooks/useFormInstance'
-import { useState } from 'react'
-import CreateTableForm from './CreateTableForm'
+import { useForm } from 'antd/lib/form/Form'
+import { useContext } from 'react'
+import { tablesContext } from '../../contexts'
+import { useCreateTable } from '../../hooks/graphql/mutations/tables'
+import { ITablePostBody } from '../../utils/interfaces/table'
+import { errorNotification } from '../../utils/notifications'
+import TableForm from './TableForm'
 
 export function CreateTableModal() {
-    const [isVisible, setIsVisible] = useState(true)
-    const form = useFormInstance()
+    const [form] = useForm()
 
-    function onOk() {}
+    const {
+        tablesState: [tables, setTables],
+        createTableModalVisibilityState: [isVisible, setIsVisible]
+    } = useContext(tablesContext)
+
+    const createTable = useCreateTable()
+
+    function onOk() {
+        form.validateFields()
+            .then((body: ITablePostBody) => {
+                createTable(body, (table) => setTables([...tables, table]))
+            })
+            .catch(() => errorNotification('Validation Error'))
+    }
 
     return (
         <Modal
@@ -19,9 +35,12 @@ export function CreateTableModal() {
                 </>
             }
             onOk={onOk}
-            onCancel={() => setIsVisible(false)}
+            onCancel={() => {
+                setIsVisible(false)
+                form.resetFields()
+            }}
         >
-            <CreateTableForm form={form} />
+            <TableForm form={form} />
         </Modal>
     )
 }

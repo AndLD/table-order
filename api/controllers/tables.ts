@@ -66,7 +66,11 @@ async function deleteTable(parent: any, args: any, context: any) {
 
     // Delete all orders bound with the table we gonna delete
     if (orders.length) {
-        await orderService.deleteOrders(orders.map((order) => order.id))
+        const promises: Promise<any>[] = []
+        orders.forEach((order) => {
+            promises.push(orderService.deleteOrder(order.id))
+        })
+        await Promise.all(promises)
     }
 
     await tableService.deleteTable(tableId)

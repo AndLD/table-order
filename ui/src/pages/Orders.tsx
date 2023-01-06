@@ -1,21 +1,15 @@
 import { Button, Popconfirm, Table } from 'antd'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { appContext } from '../contexts'
 import { useTitle } from '../hooks/app'
 import { useDeleteOrder } from '../hooks/graphql/mutations/orders'
-import { useGetAllOrders } from '../hooks/graphql/queries/orders'
 import { IOrder } from '../utils/interfaces/order'
 
 export default function Orders() {
     useTitle('Замовлення')
 
-    const [isTableLoading, setIsTableLoading] = useState(true)
-    const [orders, setOrders] = useState<IOrder[]>([])
     const [selectedRows, setSelectedRows] = useState<IOrder[]>([])
-
-    useGetAllOrders((result) => {
-        setOrders(result)
-        setIsTableLoading(false)
-    })
+    const [orders, setOrders] = useContext(appContext).ordersState
 
     const deleteOrder = useDeleteOrder()
 
@@ -86,7 +80,6 @@ export default function Orders() {
                 ]}
                 rowKey={(record: any) => record.id}
                 dataSource={orders}
-                loading={isTableLoading}
             />
         </>
     )

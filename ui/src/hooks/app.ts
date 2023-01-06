@@ -1,5 +1,7 @@
-import { useContext, useReducer, useEffect } from 'react'
+import { useContext, useEffect, useReducer, useState } from 'react'
 import { appContext } from '../contexts'
+import { IOrder } from '../utils/interfaces/order'
+import { useGetAllOrders } from './graphql/queries/orders'
 
 export function useAppContextValue(tokenState: [string | null, React.Dispatch<React.SetStateAction<string | null>>]) {
     const isMenuCollapsedState = useReducer((state: boolean, newState: boolean) => {
@@ -17,10 +19,17 @@ export function useAppContextValue(tokenState: [string | null, React.Dispatch<Re
         return newTitle
     }, 'Table order')
 
+    const [orders, setOrders] = useState<IOrder[]>([])
+    useGetAllOrders((result) => {
+        console.log(result)
+        setOrders(result)
+    })
+
     return {
         tokenState,
         isMenuCollapsedState,
-        titleState
+        titleState,
+        ordersState: [orders, setOrders] as [IOrder[], React.Dispatch<React.SetStateAction<IOrder[]>>]
     }
 }
 

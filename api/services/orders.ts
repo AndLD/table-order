@@ -60,22 +60,9 @@ async function deleteOrder(id: string) {
     }
 }
 
-async function deleteOrders(ids: string[]) {
-    const [_, modelError] = await firebaseService.query({
-        collection: 'orders',
-        action: 'delete',
-        docIds: ids
-    })
-
-    if (modelError) {
-        throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
-    }
-}
-
 export const orderService = {
     getAllOrders,
     getOrdersByTableId,
     createOrder,
-    deleteOrder,
-    deleteOrders
+    deleteOrder
 }

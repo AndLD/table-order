@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { tablesContext } from '../../contexts'
+import { appContext, tablesContext } from '../../contexts'
 import { useGetAllTables } from '../../hooks/graphql/queries/tables'
 import '../../styles/Tables.scss'
 import { ITable } from '../../utils/interfaces/table'
@@ -9,12 +9,14 @@ export default function TablesMap() {
         tablesState: [tables, setTables],
         selectedTableState: [selectedTable, setSelectedTable],
         tableInitialValuesState: [tableInitialValues, setTableInitialValues],
-        createTableModalVisibilityState: [isCreateTableModalVisible, setIsCreateTableModalVisible]
+        createTableModalVisibilityState: [isCreateTableModalVisible, setIsCreateTableModalVisible],
+        selectedTimestampState: [selectedTimestamp, setSelectedTimestamp]
     } = useContext(tablesContext)
     useGetAllTables(setTables)
 
+    const [orders, setOrders] = useContext(appContext).ordersState
+
     const [map, setMap] = useState<(ITable | null)[][]>([])
-    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const _tables = [...tables]
@@ -51,7 +53,18 @@ export default function TablesMap() {
                                     style={{
                                         borderRadius: table.shape === 'oval' ? '50%' : 'none',
                                         borderColor:
-                                            (x === selectedTable?.x && y === selectedTable?.y && 'green') || 'black'
+                                            x === selectedTable?.x && y === selectedTable?.y
+                                                ? 'green'
+                                                : selectedTimestamp &&
+                                                  // TODO: Refactor: Optimize algorithm
+                                                  orders.find((order) => {
+                                                      return (
+                                                          order.tableId === table.id &&
+                                                          Math.abs(selectedTimestamp - order.timestamp) < 60 * 60 * 1000
+                                                      )
+                                                  })
+                                                ? 'red'
+                                                : 'black'
                                     }}
                                     onClick={() => {
                                         if (table === selectedTable) {
@@ -61,7 +74,7 @@ export default function TablesMap() {
                                         }
                                     }}
                                 >
-                                    {y}/{x}
+                                    {x}/{y}
                                 </div>
                             )
                         } else {
@@ -74,7 +87,7 @@ export default function TablesMap() {
                                         setTableInitialValues({ x, y })
                                     }}
                                 >
-                                    {y}/{x}
+                                    {x}/{y}
                                 </div>
                             )
                         }

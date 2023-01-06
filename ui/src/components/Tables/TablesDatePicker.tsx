@@ -1,16 +1,12 @@
 import { DatePicker } from 'antd'
 import moment from 'moment'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { tablesContext } from '../../contexts'
 
 export default function TablesDatePicker() {
     const {
         selectedTimestampState: [selectedTimestamp, setSelectedTimestamp]
     } = useContext(tablesContext)
-
-    useEffect(() => {
-        console.log(selectedTimestamp)
-    }, [selectedTimestamp])
 
     return (
         <DatePicker

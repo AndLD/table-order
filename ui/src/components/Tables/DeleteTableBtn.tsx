@@ -1,6 +1,6 @@
 import { Button, Popconfirm } from 'antd'
 import { useContext } from 'react'
-import { tablesContext } from '../../contexts'
+import { appContext, tablesContext } from '../../contexts'
 import { useDeleteTable } from '../../hooks/graphql/mutations/tables'
 
 export default function DeleteTableBtn() {
@@ -8,6 +8,8 @@ export default function DeleteTableBtn() {
         tablesState: [tables, setTables],
         selectedTableState: [selectedTable, setSelectedTable]
     } = useContext(tablesContext)
+
+    const [orders, setOrders] = useContext(appContext).ordersState
 
     const deleteTable = useDeleteTable()
 
@@ -20,6 +22,7 @@ export default function DeleteTableBtn() {
                     deleteTable(selectedTable.id, (result) => {
                         if (result) {
                             setTables(tables.filter((table) => table.id !== selectedTable.id))
+                            setOrders(orders.filter((order) => order.tableId !== selectedTable.id))
                             setSelectedTable(null)
                         }
                     })

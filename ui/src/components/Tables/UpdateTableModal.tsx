@@ -61,7 +61,7 @@ export function UpdateTableModal() {
             visible={isVisible}
             title={
                 <>
-                    <ToolOutlined style={{ fontSize: 22 }} /> Update Table
+                    <ToolOutlined style={{ fontSize: 22 }} /> Редагувати Стіл
                 </>
             }
             onOk={onOk}

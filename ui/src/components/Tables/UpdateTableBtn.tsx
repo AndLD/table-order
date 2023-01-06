@@ -21,7 +21,7 @@ export default function UpdateTableBtn() {
                 }
             }}
         >
-            Update
+            Редагувати
         </Button>
     )
 }

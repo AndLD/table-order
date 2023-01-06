@@ -19,6 +19,7 @@ export default function TablesDatePicker() {
             onChange={(value) => {
                 setSelectedTimestamp(value ? value.unix() * 1000 : null)
             }}
+            placeholder="Оберіть дату"
         />
     )
 }

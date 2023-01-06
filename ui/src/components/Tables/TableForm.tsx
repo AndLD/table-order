@@ -26,12 +26,12 @@ export default function CreateTableForm({ form }: ITableFormProps) {
         <Form form={form}>
             <Form.Item
                 name="shape"
-                label="Shape"
+                label="Форма"
                 required
                 rules={[
                     {
                         required: true,
-                        message: 'Shape is required'
+                        message: 'Обов`язкове поле'
                     }
                 ]}
             >
@@ -39,11 +39,11 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                     options={[
                         {
                             value: 'oval',
-                            label: 'Oval'
+                            label: 'Овальний'
                         },
                         {
                             value: 'rectangular',
-                            label: 'Rectangular'
+                            label: 'Прямокутний'
                         }
                     ]}
                 />
@@ -51,12 +51,12 @@ export default function CreateTableForm({ form }: ITableFormProps) {
 
             <Form.Item
                 name="seats"
-                label="Seats"
+                label="Місця"
                 required
                 rules={[
                     {
                         required: true,
-                        message: 'Seats is required'
+                        message: 'Обов`язкове поле'
                     }
                 ]}
             >
@@ -65,12 +65,12 @@ export default function CreateTableForm({ form }: ITableFormProps) {
 
             <Form.Item
                 name="width"
-                label="Width"
+                label="Ширина"
                 required
                 rules={[
                     {
                         required: true,
-                        message: 'Width is required'
+                        message: 'Обов`язкове поле'
                     }
                 ]}
             >
@@ -78,12 +78,12 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             </Form.Item>
             <Form.Item
                 name="height"
-                label="Height"
+                label="Висота"
                 required
                 rules={[
                     {
                         required: true,
-                        message: 'Height is required'
+                        message: 'Обов`язкове поле'
                     }
                 ]}
             >
@@ -97,7 +97,7 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                 rules={[
                     {
                         required: true,
-                        message: 'X is required'
+                        message: 'Обов`язкове поле'
                     }
                 ]}
             >
@@ -110,7 +110,7 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                 rules={[
                     {
                         required: true,
-                        message: 'Y is required'
+                        message: 'Обов`язкове поле'
                     }
                 ]}
             >

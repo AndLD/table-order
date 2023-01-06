@@ -41,7 +41,7 @@ export function CreateTableModal() {
             visible={isVisible}
             title={
                 <>
-                    <ToolOutlined style={{ fontSize: 22 }} /> Create Table
+                    <ToolOutlined style={{ fontSize: 22 }} /> Створити Стіл
                 </>
             }
             onOk={onOk}

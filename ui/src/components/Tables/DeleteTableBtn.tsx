@@ -16,7 +16,7 @@ export default function DeleteTableBtn() {
     return (
         <Popconfirm
             disabled={!selectedTable}
-            title="Are you sure to delete?"
+            title="Будуть видалені усі замовлення, що відносяться до цього столу. Підтверджуєте?"
             onConfirm={() => {
                 if (selectedTable) {
                     deleteTable(selectedTable.id, (result) => {
@@ -28,11 +28,11 @@ export default function DeleteTableBtn() {
                     })
                 }
             }}
-            okText="Yes"
-            cancelText="No"
+            okText="Так"
+            cancelText="Ні"
         >
             <Button style={{ margin: '0 0 0 5px' }} type="primary" disabled={!selectedTable}>
-                Delete
+                Видалити
             </Button>
         </Popconfirm>
     )

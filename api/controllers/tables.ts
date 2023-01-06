@@ -30,7 +30,19 @@ async function updateTable(parent: any, args: any, context: any) {
     const tableId: string = args.req.body.variables.id
     const body: ITablePutBody = args.req.body.variables.input
 
-    await tableService.isCoordinatesUniq(body.x, body.y)
+    if (body.x || body.y) {
+        let newX = body.x
+        let newY = body.y
+
+        if (!body.x || !body.y) {
+            const table = await tableService.getTableById(tableId)
+
+            newX = body.x || table.x
+            newY = body.y || table.y
+        }
+
+        await tableService.isCoordinatesUniq(newX as number, newY as number)
+    }
 
     return await tableService.updateTable(tableId, body)
 }

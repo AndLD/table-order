@@ -21,10 +21,10 @@ export interface ITablePostBody {
 }
 
 export interface ITablePutBody {
-    seats: number
-    width: number
-    height: number
-    shape: TableShape
-    x: number
-    y: number
+    seats?: number
+    width?: number
+    height?: number
+    shape?: TableShape
+    x?: number
+    y?: number
 }

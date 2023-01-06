@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CreateTableModal } from '../components/Tables/CreateTableModal'
 import { useTitle } from '../hooks/app'
 import { useGetAllTables } from '../hooks/graphql/queries/tables'
 import { ITable } from '../utils/interfaces/table'
@@ -11,10 +12,11 @@ export default function Tables() {
     useGetAllTables(setTables)
 
     return (
-        <div>
-            {tables.map((table) => (
-                <div key={table.id}>{table.number}</div>
-            ))}
-        </div>
+        // <div>
+        //     {tables.map((table) => (
+        //         <div key={table.id}>{table.number}</div>
+        //     ))}
+        // </div>
+        <CreateTableModal />
     )
 }

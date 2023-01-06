@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client'
 import { useContext } from 'react'
 import { appContext } from '../../../contexts'
-import { CREATE_TABLE, UPDATE_TABLE } from '../../../graphql/mutations/tables'
+import { CREATE_TABLE, DELETE_TABLE, UPDATE_TABLE } from '../../../graphql/mutations/tables'
 import { ITable, ITablePostBody, ITablePutBody } from '../../../utils/interfaces/table'
 import { errorNotification } from '../../../utils/notifications'
 
@@ -64,6 +64,37 @@ export function useUpdateTable() {
                 const errors = err.graphQLErrors
 
                 errorNotification(errors.join('\n'), 'Помилка змінення столу')
+            })
+    }
+}
+
+export function useDeleteTable() {
+    const [token] = useContext(appContext).tokenState
+
+    const [deleteTableMutation] = useMutation(DELETE_TABLE, {
+        ignoreResults: true,
+        context: {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    })
+
+    return (id: string, callback: (result: boolean) => void) => {
+        deleteTableMutation({
+            variables: {
+                id
+            }
+        })
+            .then(({ data }) => {
+                if (data.deleteTable) {
+                    callback(data.deleteTable)
+                }
+            })
+            .catch((err) => {
+                const errors = err.graphQLErrors
+
+                errorNotification(errors.join('\n'), 'Помилка видалення замовлення')
             })
     }
 }

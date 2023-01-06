@@ -42,8 +42,6 @@ async function _sendMail({ email, subject, html }: { email: string; subject: str
         return
     }
 
-    console.log(1)
-
     await transporter.sendMail({
         from: `Table Order <${EMAIL_SMTP_USER}>`,
         to: email,

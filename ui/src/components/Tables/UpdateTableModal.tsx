@@ -35,7 +35,7 @@ export function UpdateTableModal() {
                     return errorNotification('Не оновлено жодного поля')
                 }
 
-                updateTable(selectedTable.id, putBody, (updatedTable) =>
+                updateTable(selectedTable.id, putBody, (updatedTable) => {
                     setTables(
                         tables.map((table) => {
                             if (table.id === selectedTable.id) {
@@ -45,9 +45,16 @@ export function UpdateTableModal() {
                             return table
                         })
                     )
-                )
+                    setSelectedTable(null)
+                    close()
+                })
             })
             .catch(() => errorNotification('Validation Error'))
+    }
+
+    function close() {
+        setIsVisible(false)
+        form.resetFields()
     }
 
     return (
@@ -59,10 +66,7 @@ export function UpdateTableModal() {
                 </>
             }
             onOk={onOk}
-            onCancel={() => {
-                setIsVisible(false)
-                form.resetFields()
-            }}
+            onCancel={close}
         >
             <TableForm form={form} />
         </Modal>

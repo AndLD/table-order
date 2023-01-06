@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const CREATE_TABLE = gql`
-    mutation createTable($input: TableInput) {
+    mutation createTable($input: CreateTableInput) {
         createTable(input: $input) {
             id
             number
@@ -16,7 +16,7 @@ export const CREATE_TABLE = gql`
 `
 
 export const UPDATE_TABLE = gql`
-    mutation updateTable($id: String, $input: TableInput) {
+    mutation updateTable($id: String, $input: UpdateTableInput) {
         updateTable(id: $id, input: $input) {
             id
             number
@@ -27,5 +27,11 @@ export const UPDATE_TABLE = gql`
             x
             y
         }
+    }
+`
+
+export const DELETE_TABLE = gql`
+    mutation deleteTable($id: String) {
+        deleteTable(id: $id)
     }
 `

@@ -1,5 +1,5 @@
-import { Form, FormInstance, Input, Select } from 'antd'
-import { useContext } from 'react'
+import { Form, FormInstance, InputNumber, Select } from 'antd'
+import { useContext, useEffect } from 'react'
 import { tablesContext } from '../../contexts'
 
 interface ITableFormProps {
@@ -7,10 +7,23 @@ interface ITableFormProps {
 }
 
 export default function CreateTableForm({ form }: ITableFormProps) {
-    const [initialValues] = useContext(tablesContext).tableInitialValuesState
+    const {
+        tableInitialValuesState: [initialValues],
+        createTableModalVisibilityState: [isCreateTableModalVisible]
+    } = useContext(tablesContext)
+
+    useEffect(() => {
+        form.setFieldsValue({
+            ...initialValues,
+            shape: initialValues?.shape || 'rectangular',
+            seats: initialValues?.seats || 4,
+            width: initialValues?.width || 100,
+            height: initialValues?.height || 100
+        })
+    }, [initialValues])
 
     return (
-        <Form form={form} initialValues={{ ...initialValues, shape: 'rectangular', width: 100, height: 100 }}>
+        <Form form={form}>
             <Form.Item
                 name="shape"
                 label="Shape"
@@ -37,6 +50,20 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             </Form.Item>
 
             <Form.Item
+                name="seats"
+                label="Seats"
+                required
+                rules={[
+                    {
+                        required: true,
+                        message: 'Seats is required'
+                    }
+                ]}
+            >
+                <InputNumber style={{ width: 75 }} />
+            </Form.Item>
+
+            <Form.Item
                 name="width"
                 label="Width"
                 required
@@ -47,7 +74,7 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                     }
                 ]}
             >
-                <Input style={{ width: 75 }} type="number" />
+                <InputNumber style={{ width: 75 }} />
             </Form.Item>
             <Form.Item
                 name="height"
@@ -60,7 +87,7 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                     }
                 ]}
             >
-                <Input style={{ width: 75 }} type="number" />
+                <InputNumber style={{ width: 75 }} />
             </Form.Item>
 
             <Form.Item
@@ -74,7 +101,7 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                     }
                 ]}
             >
-                <Input disabled style={{ width: 75 }} />
+                <InputNumber disabled={isCreateTableModalVisible} style={{ width: 75 }} />
             </Form.Item>
             <Form.Item
                 name="y"
@@ -87,7 +114,7 @@ export default function CreateTableForm({ form }: ITableFormProps) {
                     }
                 ]}
             >
-                <Input disabled style={{ width: 75 }} />
+                <InputNumber disabled={isCreateTableModalVisible} style={{ width: 75 }} />
             </Form.Item>
         </Form>
     )

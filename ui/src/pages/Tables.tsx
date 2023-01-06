@@ -1,4 +1,5 @@
 import { CreateTableModal } from '../components/Tables/CreateTableModal'
+import TableControls from '../components/Tables/TableControls'
 import TablesMap from '../components/Tables/TablesMap'
 import { UpdateTableModal } from '../components/Tables/UpdateTableModal'
 import { tablesContext } from '../contexts'
@@ -10,6 +11,7 @@ export default function Tables() {
 
     return (
         <tablesContext.Provider value={useTablesContextValue()}>
+            <TableControls />
             <TablesMap />
             <CreateTableModal />
             <UpdateTableModal />

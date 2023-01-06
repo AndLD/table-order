@@ -48,7 +48,7 @@ export function useDeleteOrder() {
         }
     })
 
-    return (id: string, callback: (result: any) => void) => {
+    return (id: string, callback: (result: boolean) => void) => {
         deleteOrderMutation({
             variables: {
                 id

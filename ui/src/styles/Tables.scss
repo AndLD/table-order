@@ -5,31 +5,38 @@
     padding: 10px;
 
     .str {
-        // flex: 1;
         display: flex;
 
         .point {
             width: 50px;
             height: 50px;
-            font-size: 20px;
             margin: 5px;
+            font-size: 18px;
+            font-weight: bold;
 
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all ease 0.3s;
         }
 
         .table {
             background: rgb(227, 144, 0);
             border: 3px solid black;
-            color: white;
+            color: rgb(227, 144, 0);
+        }
+        .table:hover {
+            color: rgb(166, 105, 0);
         }
 
         .empty {
             border: 2px dashed gray;
-            color: rgb(222, 222, 222);
-            font-weight: bold;
+            color: antiquewhite;
+        }
+
+        .empty:hover {
+            color: gray;
         }
     }
 }

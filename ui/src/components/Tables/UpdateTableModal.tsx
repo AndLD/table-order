@@ -54,7 +54,6 @@ export function UpdateTableModal() {
 
     function close() {
         setIsVisible(false)
-        form.resetFields()
     }
 
     return (

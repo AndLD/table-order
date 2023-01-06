@@ -60,7 +60,9 @@ export default function TablesMap() {
                                             setSelectedTable(table)
                                         }
                                     }}
-                                ></div>
+                                >
+                                    {y}/{x}
+                                </div>
                             )
                         } else {
                             return (
@@ -71,7 +73,9 @@ export default function TablesMap() {
                                         setIsCreateTableModalVisible(true)
                                         setTableInitialValues({ x, y })
                                     }}
-                                ></div>
+                                >
+                                    {y}/{x}
+                                </div>
                             )
                         }
                     })}

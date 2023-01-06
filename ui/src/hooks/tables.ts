@@ -20,6 +20,7 @@ export function useTablesContextValue() {
             React.Dispatch<React.SetStateAction<ITable | null>>
         ],
         createTableModalVisibilityState: useState(false),
-        updateTableModalVisibilityState: useState(false)
+        updateTableModalVisibilityState: useState(false),
+        selectedTimestampState: useState<number | null>(null)
     }
 }

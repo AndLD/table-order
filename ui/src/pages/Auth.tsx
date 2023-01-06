@@ -1,6 +1,6 @@
-import '../styles/Auth.scss'
 import { useEffect } from 'react'
 import SigninForm from '../components/Auth/SigninForm'
+import '../styles/Auth.scss'
 
 const icon1 = require('../assets/auth1.png')
 const icon2 = require('../assets/auth2.png')

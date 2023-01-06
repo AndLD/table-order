@@ -16,6 +16,7 @@ export default function Orders() {
         setOrders(result)
         setIsTableLoading(false)
     })
+
     const deleteOrder = useDeleteOrder()
 
     return (

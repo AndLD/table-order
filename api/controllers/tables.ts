@@ -1,3 +1,4 @@
+import { GraphQLError } from 'graphql'
 import { isAuthorized } from '../middlewares/auth'
 import { orderService } from '../services/orders'
 import { tableService } from '../services/tables'
@@ -15,6 +16,10 @@ async function createTable(parent: any, args: any, context: any) {
 
     const body: ITablePostBody = args.req.body.variables.input
 
+    if (body.x > 10 || body.x < 0 || body.y > 10 || body.y < 0) {
+        throw new GraphQLError(`Invalid coordinates: x or y should exist in the range [0-10] 400`)
+    }
+
     await tableService.isCoordinatesUniq(body.x, body.y)
 
     const table = {
@@ -30,6 +35,10 @@ async function updateTable(parent: any, args: any, context: any) {
 
     const tableId: string = args.req.body.variables.id
     const body: ITablePutBody = args.req.body.variables.input
+
+    if ((body.x && body.x > 10) || (body.x && body.x < 0) || (body.y && body.y > 10) || (body.y && body.y < 0)) {
+        throw new GraphQLError(`Invalid coordinates: x or y should exist in the range [0-10] 400`)
+    }
 
     if (body.x || body.y) {
         let newX = body.x

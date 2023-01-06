@@ -26,7 +26,7 @@ export const schema = buildSchema(`
         password: String!
     }
 
-    input TableInput {
+    input CreateTableInput {
         id: ID
         number: Int
         seats: Int!
@@ -35,6 +35,17 @@ export const schema = buildSchema(`
         shape: String!
         x: Int!
         y: Int!
+    }
+
+    input UpdateTableInput {
+        id: ID
+        number: Int
+        seats: Int
+        width: Int
+        height: Int
+        shape: String
+        x: Int
+        y: Int
     }
 
     input OrderInput {
@@ -57,8 +68,8 @@ export const schema = buildSchema(`
     type Mutation {
         login(input: LoginInput): String
         
-        createTable(input: TableInput): Table
-        updateTable(id: String, input: TableInput): Table
+        createTable(input: CreateTableInput): Table
+        updateTable(id: String, input: UpdateTableInput): Table
         deleteTable(id: String): Boolean
         
         createOrder(input: OrderInput): Order

@@ -1,0 +1,42 @@
+.tables-map {
+    background-color: antiquewhite;
+    margin: auto;
+    position: relative;
+    padding: 10px;
+
+    .str {
+        display: flex;
+
+        .point {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all ease 0.3s;
+        }
+
+        .table {
+            background: rgb(227, 144, 0);
+            border: 3px solid black;
+            color: rgb(227, 144, 0);
+        }
+        .table:hover {
+            color: rgb(166, 105, 0);
+        }
+
+        .empty {
+            border: 2px dashed gray;
+            color: antiquewhite;
+        }
+
+        .empty:hover {
+            color: gray;
+        }
+    }
+}

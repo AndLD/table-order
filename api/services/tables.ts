@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql'
-import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
+import { ITable, ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
 import { firebaseService } from './firebase'
 
 async function getAllTables() {
@@ -23,7 +23,7 @@ async function getTableById(id: string) {
         throw new GraphQLError(`${modelError.msg} ${modelError.code}`)
     }
 
-    return modelResult
+    return modelResult as ITable
 }
 
 async function createTable(table: ITablePostBody) {

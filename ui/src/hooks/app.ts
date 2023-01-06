@@ -21,7 +21,6 @@ export function useAppContextValue(tokenState: [string | null, React.Dispatch<Re
 
     const [orders, setOrders] = useState<IOrder[]>([])
     useGetAllOrders((result) => {
-        console.log(result)
         setOrders(result)
     })
 

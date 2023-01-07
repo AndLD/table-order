@@ -56,13 +56,6 @@ export default function UserTablesMap() {
 
                             return (
                                 <div className="table-wrapper">
-                                    {/* <div
-                                        className="table-unavailable-mark"
-                                        style={{
-                                            borderRadius: table.shape === 'oval' ? '50%' : 'none',
-                                            display: isTableAvailable ? 'none' : 'block'
-                                        }}
-                                    ></div> */}
                                     <div
                                         className="point table"
                                         key={crypto.randomUUID()}

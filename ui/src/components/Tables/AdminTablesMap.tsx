@@ -72,7 +72,7 @@ export default function AdminTablesMap() {
                                         }
                                     }}
                                 >
-                                    {x}/{y}
+                                    {table.number}
                                 </div>
                             )
                         } else {

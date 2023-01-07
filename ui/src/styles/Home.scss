@@ -34,15 +34,6 @@
             .table-wrapper {
                 position: relative;
 
-                .table-unavailable-mark {
-                    top: 5px;
-                    left: 5px;
-                    position: absolute;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    width: 50px;
-                    height: 50px;
-                }
-
                 .table {
                     cursor: pointer;
                     background: rgb(227, 144, 0);

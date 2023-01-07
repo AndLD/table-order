@@ -27,7 +27,6 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             <Form.Item
                 name="shape"
                 label="Форма"
-                required
                 rules={[
                     {
                         required: true,
@@ -52,7 +51,6 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             <Form.Item
                 name="seats"
                 label="Місця"
-                required
                 rules={[
                     {
                         required: true,
@@ -66,7 +64,6 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             <Form.Item
                 name="width"
                 label="Ширина"
-                required
                 rules={[
                     {
                         required: true,
@@ -79,7 +76,6 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             <Form.Item
                 name="height"
                 label="Висота"
-                required
                 rules={[
                     {
                         required: true,
@@ -93,7 +89,6 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             <Form.Item
                 name="x"
                 label="X"
-                required
                 rules={[
                     {
                         required: true,
@@ -106,7 +101,6 @@ export default function CreateTableForm({ form }: ITableFormProps) {
             <Form.Item
                 name="y"
                 label="Y"
-                required
                 rules={[
                     {
                         required: true,

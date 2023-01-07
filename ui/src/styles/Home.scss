@@ -1,0 +1,85 @@
+.home {
+    background: antiquewhite;
+    display: flex;
+    padding: 0 30vh;
+
+    .user-tables-map {
+        flex: 3;
+        margin: auto;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+
+        .str {
+            display: flex;
+
+            .point {
+                width: 50px;
+                height: 50px;
+                margin: 5px;
+                font-size: 15px;
+                font-weight: bold;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all ease 0.3s;
+            }
+
+            .table-wrapper {
+                position: relative;
+
+                .table-unavailable-mark {
+                    top: 5px;
+                    left: 5px;
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    width: 50px;
+                    height: 50px;
+                }
+
+                .table {
+                    cursor: pointer;
+                    background: rgb(227, 144, 0);
+                    border: 3px solid black;
+                    color: rgb(227, 144, 0);
+                }
+                .table:hover {
+                    color: rgb(166, 105, 0);
+                }
+            }
+
+            .empty {
+                border: 2px dashed gray;
+                color: antiquewhite;
+            }
+
+            .empty:hover {
+                color: gray;
+            }
+        }
+    }
+
+    .order-form-wrapper {
+        padding: 30px;
+        flex: 1;
+        background: white;
+
+        .table-date-picker-wrapper {
+            margin-bottom: 25px;
+
+            .table-date-picker {
+                width: 100%;
+            }
+        }
+
+        .create-order-btn {
+            width: 100%;
+        }
+    }
+}

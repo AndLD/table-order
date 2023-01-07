@@ -20,9 +20,7 @@ export function useAppContextValue(tokenState: [string | null, React.Dispatch<Re
     }, 'Table order')
 
     const [orders, setOrders] = useState<IOrder[]>([])
-    useGetAllOrders((result) => {
-        setOrders(result)
-    })
+    useGetAllOrders(setOrders)
 
     return {
         tokenState,

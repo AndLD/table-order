@@ -10,10 +10,11 @@ export default function TablesDatePicker() {
 
     return (
         <DatePicker
-            format="YYYY-MM-DD HH:mm"
+            className="table-date-picker"
+            format="YYYY-MM-DD HH"
             disabledDate={(current) => {
-                let customDate = moment().format('YYYY-MM-DD HH:mm')
-                return current && current < moment(customDate, 'YYYY-MM-DD HH:mm')
+                let customDate = moment().format('YYYY-MM-DD HH')
+                return current && current < moment(customDate, 'YYYY-MM-DD HH')
             }}
             showTime
             onChange={(value) => {

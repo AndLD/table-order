@@ -6,8 +6,6 @@ import { tableService } from '../services/tables'
 import { IOrderPostBody } from '../utils/interfaces/order'
 
 async function getAllOrders(parent: any, args: any, context: any) {
-    isAuthorized(parent, args, context)
-
     return await orderService.getAllOrders()
 }
 

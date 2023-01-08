@@ -1,7 +1,8 @@
 import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client'
+import { API_URL } from '../utils/constants'
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:8080/graphql'
+    uri: API_URL + '/graphql'
 })
 
 const authLink = new ApolloLink((operation, forward) => {

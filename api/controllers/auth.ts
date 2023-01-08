@@ -6,7 +6,7 @@ import { IUserState } from '../utils/interfaces/user'
 import { createJwt } from '../utils/jwt'
 
 function getIsAuthorized(parent: any, args: any, context: any) {
-    return !!isAuthorized(parent, args, context)
+    return isAuthorized(parent, args, context)
 }
 function login(parent: any, args: any, context: any) {
     try {

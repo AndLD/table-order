@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+    nginx:
+        container_name: table-order_nginx
+        hostname: table-order_nginx
+        build: ./
+        ports:
+            - '80:80'
+        depends_on:
+            - api
+    api:
+        container_name: table-order_api
+        hostname: table-order_api
+        build: api/
+        restart: unless-stopped

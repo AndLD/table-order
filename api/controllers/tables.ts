@@ -6,8 +6,6 @@ import { getRandomNumber } from '../utils/common'
 import { ITablePostBody, ITablePutBody } from '../utils/interfaces/table'
 
 async function getAllTables(parent: any, args: any, context: any) {
-    isAuthorized(parent, args, context)
-
     return await tableService.getAllTables()
 }
 

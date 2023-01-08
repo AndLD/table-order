@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken'
-import { accessJwtSecret } from '../utils/jwt'
-import { errors } from '../utils/constants'
 import { GraphQLError } from 'graphql'
+import jwt from 'jsonwebtoken'
+import { errors } from '../utils/constants'
+import { accessJwtSecret } from '../utils/jwt'
 
 export function isAuthorized(parent: any, args: any, context: any) {
     const authorizationHeader = args.req.headers.authorization
@@ -17,7 +17,7 @@ export function isAuthorized(parent: any, args: any, context: any) {
 
         args.req.user = decodeValue.user
 
-        return args
+        return true
     } catch (e) {
         throw new GraphQLError(`${errors.JWT_INVALID.msg} ${errors.JWT_INVALID.code}`)
     }

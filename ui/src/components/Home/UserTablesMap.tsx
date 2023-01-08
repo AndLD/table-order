@@ -39,7 +39,7 @@ export default function UserTablesMap() {
     return (
         <span className="user-tables-map">
             {map.map((str, x) => (
-                <div className="str" key={crypto.randomUUID()}>
+                <div className="str" key={`x${x}`}>
                     {str.map((table, y) => {
                         if (table) {
                             const isTableOccupied =
@@ -58,7 +58,7 @@ export default function UserTablesMap() {
                                 <div className="table-wrapper">
                                     <div
                                         className="point table"
-                                        key={crypto.randomUUID()}
+                                        key={`y${y}`}
                                         style={{
                                             borderRadius: table.shape === 'oval' ? '50%' : 'none',
                                             borderColor:
@@ -83,7 +83,7 @@ export default function UserTablesMap() {
                                 </div>
                             )
                         } else {
-                            return <div className="point empty" key={crypto.randomUUID()}></div>
+                            return <div className="point empty" key={`empty-y${y}`}></div>
                         }
                     })}
                 </div>

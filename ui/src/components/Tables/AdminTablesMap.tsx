@@ -41,13 +41,13 @@ export default function AdminTablesMap() {
     return (
         <div className="admin-tables-map" style={{ width: map.length * 60 - 10 }}>
             {map.map((str, x) => (
-                <div className="str" key={crypto.randomUUID()}>
+                <div className="str" key={`x${x}`}>
                     {str.map((table, y) => {
                         if (table) {
                             return (
                                 <div
                                     className="point table"
-                                    key={crypto.randomUUID()}
+                                    key={`y${y}`}
                                     style={{
                                         borderRadius: table.shape === 'oval' ? '50%' : 'none',
                                         borderColor:
@@ -79,7 +79,7 @@ export default function AdminTablesMap() {
                             return (
                                 <div
                                     className="point empty"
-                                    key={crypto.randomUUID()}
+                                    key={`empty-y${y}`}
                                     onClick={() => {
                                         setIsCreateTableModalVisible(true)
                                         setTableInitialValues({ x, y })
